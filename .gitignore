@@ -1,0 +1,59 @@
+﻿# =============================================================
+# .gitignore
+# Business Data Analysis and Revenue Prediction Platform
+# =============================================================
+
+# -- Python ---------------------------------------------------
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.so
+
+# -- Virtual environment --------------------------------------
+venv/
+env/
+.venv/
+.env/
+
+# -- Environment variables ------------------------------------
+.env
+.env.local
+
+# -- Jupyter --------------------------------------------------
+.ipynb_checkpoints/
+*.ipynb_checkpoints
+
+# -- Distribution / packaging ---------------------------------
+dist/
+build/
+*.egg-info/
+*.egg
+
+# -- IDE and editor -------------------------------------------
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# -- OS generated ---------------------------------------------
+.DS_Store
+.DS_Store?
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# -- Logs -----------------------------------------------------
+*.log
+logs/
+
+# -- Pytest / coverage ----------------------------------------
+.pytest_cache/
+.coverage
+htmlcov/
+
+# -- MyPy -----------------------------------------------------
+.mypy_cache/
+
+# -- Node (not used here, but safe to include) ----------------
+node_modules/

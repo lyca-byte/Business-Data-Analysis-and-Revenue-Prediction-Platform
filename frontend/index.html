@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Business Revenue Prediction Platform</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+<!-- ── Navigation ───────────────────────────────────────────── -->
+<nav class="nav">
+  <div class="nav-inner">
+    <span class="nav-brand">Revenue Prediction Platform</span>
+    <ul class="nav-links">
+      <li><a href="index.html" class="active">Home</a></li>
+      <li><a href="dashboard.html">Data Analysis</a></li>
+      <li><a href="model.html">Model Performance</a></li>
+      <li><a href="prediction.html">Prediction</a></li>
+    </ul>
+  </div>
+</nav>
+
+<!-- ── Main Content ─────────────────────────────────────────── -->
+<main class="page-wrapper">
+
+  <!-- Hero -->
+  <section class="hero">
+    <h1>Business Data Analysis &amp;<br>Revenue Prediction Platform</h1>
+    <p>
+      An end-to-end Machine Learning application that analyzes business data,
+      visualizes relationships between key variables, and predicts revenue
+      using a trained Linear Regression model.
+    </p>
+    <div class="hero-actions">
+      <a href="dashboard.html" class="btn btn-primary btn-lg">Explore Data Analysis</a>
+      <a href="prediction.html" class="btn btn-secondary btn-lg">Try Prediction</a>
+    </div>
+  </section>
+
+  <!-- Project Overview -->
+  <section class="section">
+    <div class="grid-2">
+
+      <div class="card">
+        <div class="card-title">Project Objective</div>
+        <p class="text-sm text-muted" style="line-height:1.75;">
+          This project demonstrates an end-to-end Machine Learning workflow —
+          from synthetic dataset generation through exploratory data analysis,
+          model training, and final deployment as a web application with a
+          REST API backend.
+        </p>
+        <div style="margin-top:1rem; display:flex; gap:0.5rem; flex-wrap:wrap;">
+          <span class="badge badge-blue">Data Analysis</span>
+          <span class="badge badge-blue">Machine Learning</span>
+          <span class="badge badge-green">REST API</span>
+          <span class="badge badge-green">Web Application</span>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Problem Statement</div>
+        <p class="text-sm text-muted" style="line-height:1.75;">
+          Businesses collect operational and marketing data, but raw data alone
+          does not provide actionable insights. This platform demonstrates how
+          business data can be analyzed, visualized, and used to build a
+          predictive model that forecasts revenue from key business inputs.
+        </p>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ML Workflow -->
+  <section class="section">
+    <div class="card">
+      <div class="card-title">Machine Learning Workflow</div>
+      <div class="workflow">
+        <span class="workflow-step">Dataset Generation</span>
+        <span class="workflow-arrow">&#8594;</span>
+        <span class="workflow-step">Data Cleaning</span>
+        <span class="workflow-arrow">&#8594;</span>
+        <span class="workflow-step">Exploratory Data Analysis</span>
+        <span class="workflow-arrow">&#8594;</span>
+        <span class="workflow-step">Feature Scaling</span>
+        <span class="workflow-arrow">&#8594;</span>
+        <span class="workflow-step">Train / Val / Test Split</span>
+        <span class="workflow-arrow">&#8594;</span>
+        <span class="workflow-step">Model Training</span>
+        <span class="workflow-arrow">&#8594;</span>
+        <span class="workflow-step">Validation</span>
+        <span class="workflow-arrow">&#8594;</span>
+        <span class="workflow-step">Final Evaluation</span>
+        <span class="workflow-arrow">&#8594;</span>
+        <span class="workflow-step">Model Saving</span>
+        <span class="workflow-arrow">&#8594;</span>
+        <span class="workflow-step">FastAPI Backend</span>
+        <span class="workflow-arrow">&#8594;</span>
+        <span class="workflow-step">Web Application</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Dataset Features -->
+  <section class="section">
+    <div class="card">
+      <div class="card-title">Dataset Features</div>
+      <div class="grid-2">
+        <div>
+          <p class="text-sm fw-bold mb-1">Input Features (7)</p>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Feature</th>
+                  <th>Description</th>
+                  <th>Unit</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr><td>Marketing Spend</td><td>Marketing budget allocated</td><td>USD</td></tr>
+                <tr><td>Advertising Spend</td><td>Advertising campaign cost</td><td>USD</td></tr>
+                <tr><td>Website Traffic</td><td>Monthly website visitors</td><td>Count</td></tr>
+                <tr><td>Number of Customers</td><td>Customers in the period</td><td>Count</td></tr>
+                <tr><td>Product Price</td><td>Average product price</td><td>USD</td></tr>
+                <tr><td>Discount Percentage</td><td>Discount offered</td><td>%</td></tr>
+                <tr><td>Previous Revenue</td><td>Revenue from prior period</td><td>USD</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div>
+          <p class="text-sm fw-bold mb-1">Target Variable</p>
+          <div class="stat-card" style="margin-bottom:1rem;">
+            <div class="stat-label">Revenue</div>
+            <div class="stat-value" style="font-size:1.25rem;">Business Revenue</div>
+            <div class="stat-sub">USD — the value the model predicts</div>
+          </div>
+          <p class="text-sm fw-bold mb-1">Dataset Summary</p>
+          <div class="stat-card">
+            <div class="stat-label">Total Samples</div>
+            <div class="stat-value">5,000</div>
+            <div class="stat-sub">70% train / 15% validation / 15% test</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Technology Stack -->
+  <section class="section">
+    <div class="card">
+      <div class="card-title">Technology Stack</div>
+      <div class="grid-3">
+        <div>
+          <p class="text-sm fw-bold mb-1">Data &amp; Machine Learning</p>
+          <ul class="tech-list">
+            <li class="tech-item">Python 3.10</li>
+            <li class="tech-item">Pandas</li>
+            <li class="tech-item">NumPy</li>
+            <li class="tech-item">Scikit-learn</li>
+            <li class="tech-item">Matplotlib</li>
+            <li class="tech-item">Seaborn</li>
+            <li class="tech-item">Joblib</li>
+          </ul>
+        </div>
+        <div>
+          <p class="text-sm fw-bold mb-1">Backend</p>
+          <ul class="tech-list">
+            <li class="tech-item">FastAPI</li>
+            <li class="tech-item">Uvicorn</li>
+            <li class="tech-item">Pydantic</li>
+          </ul>
+          <p class="text-sm fw-bold mb-1 mt-2">Model</p>
+          <ul class="tech-list">
+            <li class="tech-item">Linear Regression</li>
+            <li class="tech-item">StandardScaler</li>
+          </ul>
+        </div>
+        <div>
+          <p class="text-sm fw-bold mb-1">Frontend</p>
+          <ul class="tech-list">
+            <li class="tech-item">HTML5</li>
+            <li class="tech-item">CSS3</li>
+            <li class="tech-item">JavaScript</li>
+            <li class="tech-item">Chart.js</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Navigation Cards -->
+  <section class="section">
+    <div class="grid-3">
+      <a href="dashboard.html" class="card" style="text-decoration:none; cursor:pointer; transition: box-shadow 0.15s;" onmouseover="this.style.boxShadow='0 4px 12px rgba(0,0,0,0.12)'" onmouseout="this.style.boxShadow=''">
+        <div class="card-title">Data Analysis</div>
+        <p class="text-sm text-muted">
+          Explore the dataset — distributions, descriptive statistics, correlation analysis, and scatter plots.
+        </p>
+        <p class="text-sm" style="color:var(--accent); margin-top:0.75rem; font-weight:600;">View Dashboard &rarr;</p>
+      </a>
+      <a href="model.html" class="card" style="text-decoration:none; cursor:pointer; transition: box-shadow 0.15s;" onmouseover="this.style.boxShadow='0 4px 12px rgba(0,0,0,0.12)'" onmouseout="this.style.boxShadow=''">
+        <div class="card-title">Model Performance</div>
+        <p class="text-sm text-muted">
+          Review the Linear Regression model — validation metrics, test metrics, and feature coefficients.
+        </p>
+        <p class="text-sm" style="color:var(--accent); margin-top:0.75rem; font-weight:600;">View Metrics &rarr;</p>
+      </a>
+      <a href="prediction.html" class="card" style="text-decoration:none; cursor:pointer; transition: box-shadow 0.15s;" onmouseover="this.style.boxShadow='0 4px 12px rgba(0,0,0,0.12)'" onmouseout="this.style.boxShadow=''">
+        <div class="card-title">Revenue Prediction</div>
+        <p class="text-sm text-muted">
+          Enter business data and generate a revenue prediction. View results and download a summary report.
+        </p>
+        <p class="text-sm" style="color:var(--accent); margin-top:0.75rem; font-weight:600;">Make a Prediction &rarr;</p>
+      </a>
+    </div>
+  </section>
+
+</main>
+
+<!-- ── Footer ────────────────────────────────────────────────── -->
+<footer class="footer">
+  Business Data Analysis and Revenue Prediction Platform &mdash;
+  IBM SkillsBuild University Education &times; Hacktiv8 Capstone Project
+</footer>
+
+<script src="js/main.js"></script>
+</body>
+</html>

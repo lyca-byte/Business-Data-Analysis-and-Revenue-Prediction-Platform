@@ -1,0 +1,76 @@
+{
+  "model_name": "Business Revenue Prediction Model",
+  "model_type": "Linear Regression",
+  "target": "revenue",
+  "features": [
+    "marketing_spend",
+    "advertising_spend",
+    "website_traffic",
+    "number_of_customers",
+    "product_price",
+    "discount_percentage",
+    "previous_revenue"
+  ],
+  "feature_count": 7,
+  "training_date": "2026-09-14",
+  "random_state": 42,
+  "dataset": {
+    "total_samples": 5000,
+    "train_samples": 3500,
+    "validation_samples": 750,
+    "test_samples": 750,
+    "train_pct": 70,
+    "validation_pct": 15,
+    "test_pct": 15
+  },
+  "preprocessing": {
+    "scaler": "StandardScaler",
+    "fit_on": "training set only",
+    "scaler_means": {
+      "marketing_spend": 25527.4135,
+      "advertising_spend": 15354.2067,
+      "website_traffic": 89767.674,
+      "number_of_customers": 2000.074,
+      "product_price": 255.5346,
+      "discount_percentage": 25.246,
+      "previous_revenue": 256889.347
+    },
+    "scaler_stds": {
+      "marketing_spend": 14142.4555,
+      "advertising_spend": 6386.3107,
+      "website_traffic": 41863.3872,
+      "number_of_customers": 869.3006,
+      "product_price": 141.1769,
+      "discount_percentage": 14.2729,
+      "previous_revenue": 138396.4689
+    }
+  },
+  "validation_metrics": {
+    "mae": 14127.9,
+    "mse": 299508040.77,
+    "rmse": 17306.3,
+    "r2": 0.8877
+  },
+  "test_metrics": {
+    "mae": 14127.04,
+    "mse": 295075947.15,
+    "rmse": 17177.77,
+    "r2": 0.8847
+  },
+  "library_versions": {
+    "scikit_learn": "1.5.0",
+    "numpy": "1.26.4",
+    "pandas": "2.2.2",
+    "joblib": "1.4.2"
+  },
+  "coefficients": {
+    "marketing_spend": 10999.1599,
+    "advertising_spend": 4590.917,
+    "website_traffic": 1867.7821,
+    "number_of_customers": 17576.1465,
+    "product_price": 2148.7029,
+    "discount_percentage": -2942.8377,
+    "previous_revenue": 41567.981
+  },
+  "intercept": 165242.3562
+}

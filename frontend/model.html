@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Model Performance — Revenue Prediction Platform</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.2/dist/chart.umd.min.js"></script>
+</head>
+<body>
+
+<!-- ── Navigation ───────────────────────────────────────────── -->
+<nav class="nav">
+  <div class="nav-inner">
+    <span class="nav-brand">Revenue Prediction Platform</span>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="dashboard.html">Data Analysis</a></li>
+      <li><a href="model.html" class="active">Model Performance</a></li>
+      <li><a href="prediction.html">Prediction</a></li>
+    </ul>
+  </div>
+</nav>
+
+<!-- ── Main Content ─────────────────────────────────────────── -->
+<main class="page-wrapper">
+
+  <div class="page-header">
+    <h1>Model Performance</h1>
+    <p>Linear Regression model — validation and test set evaluation results.</p>
+  </div>
+
+  <!-- Model Overview -->
+  <section class="section">
+    <div class="grid-2">
+      <div class="card">
+        <div class="card-title">Model Information</div>
+        <table>
+          <tbody>
+            <tr><td style="width:45%;color:var(--text-muted);font-size:0.85rem;">Model Type</td><td style="font-weight:600;">Linear Regression</td></tr>
+            <tr><td style="color:var(--text-muted);font-size:0.85rem;">Algorithm</td><td>Ordinary Least Squares (OLS)</td></tr>
+            <tr><td style="color:var(--text-muted);font-size:0.85rem;">Library</td><td id="live-sklearn-version">scikit-learn 1.5.0</td></tr>
+            <tr><td style="color:var(--text-muted);font-size:0.85rem;">Preprocessing</td><td>StandardScaler</td></tr>
+            <tr><td style="color:var(--text-muted);font-size:0.85rem;">Input Features</td><td>7</td></tr>
+            <tr><td style="color:var(--text-muted);font-size:0.85rem;">Target Variable</td><td>Revenue (USD)</td></tr>
+            <tr><td style="color:var(--text-muted);font-size:0.85rem;">Training Samples</td><td>3,500 (70%)</td></tr>
+            <tr><td style="color:var(--text-muted);font-size:0.85rem;">Validation Samples</td><td>750 (15%)</td></tr>
+            <tr><td style="color:var(--text-muted);font-size:0.85rem;">Test Samples</td><td>750 (15%)</td></tr>
+            <tr><td style="color:var(--text-muted);font-size:0.85rem;">Training Date</td><td id="live-training-date">—</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="card">
+        <div class="card-title">What is Linear Regression?</div>
+        <p class="text-sm text-muted" style="line-height:1.75; margin-bottom:0.75rem;">
+          Linear Regression models the relationship between input features and a
+          continuous target as a weighted sum:
+        </p>
+        <div style="background:var(--surface-2);border-radius:var(--radius);padding:0.75rem 1rem;font-family:monospace;font-size:0.8rem;color:var(--text);margin-bottom:0.75rem;overflow-x:auto;">
+          Revenue = w&#8321;&times;marketing + w&#8322;&times;advertising + ... + w&#8327;&times;prev_revenue + b
+        </div>
+        <p class="text-sm text-muted" style="line-height:1.75;">
+          The algorithm learns the weights (w) and intercept (b) that minimise
+          the sum of squared errors between predictions and actual revenue values
+          across all training samples.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- API connection banner -->
+  <div id="api-connection-banner" class="hidden"></div>
+
+  <!-- Validation Metrics -->
+  <section class="section">
+    <div class="section-title">Validation Set Metrics <span class="badge badge-orange" style="margin-left:0.5rem;">Used during development</span></div>
+    <div class="grid-4">
+      <div class="metric-card">
+        <div class="metric-label">MAE</div>
+        <div class="metric-value" data-val-metric="mae">$14,128</div>
+        <div class="metric-sub">Mean Absolute Error</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-label">MSE</div>
+        <div class="metric-value" data-val-metric="mse">$299.5M</div>
+        <div class="metric-sub">Mean Squared Error (USD²)</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-label">RMSE</div>
+        <div class="metric-value" data-val-metric="rmse">$17,306</div>
+        <div class="metric-sub">Root Mean Squared Error</div>
+      </div>
+      <div class="metric-card highlight">
+        <div class="metric-label">R² Score</div>
+        <div class="metric-value" data-val-metric="r2">0.8877</div>
+        <div class="metric-sub">88.8% variance explained</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Test Metrics -->
+  <section class="section">
+    <div class="section-title">Test Set Metrics <span class="badge badge-blue" style="margin-left:0.5rem;">Final evaluation — used once</span></div>
+    <div class="grid-4">
+      <div class="metric-card">
+        <div class="metric-label">MAE</div>
+        <div class="metric-value" data-test-metric="mae">$14,127</div>
+        <div class="metric-sub">Mean Absolute Error</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-label">MSE</div>
+        <div class="metric-value" data-test-metric="mse">$295.1M</div>
+        <div class="metric-sub">Mean Squared Error (USD²)</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-label">RMSE</div>
+        <div class="metric-value" data-test-metric="rmse">$17,178</div>
+        <div class="metric-sub">Root Mean Squared Error</div>
+      </div>
+      <div class="metric-card highlight">
+        <div class="metric-label">R² Score</div>
+        <div class="metric-value" data-test-metric="r2">0.8847</div>
+        <div class="metric-sub">88.5% variance explained</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Metrics Comparison Chart -->
+  <section class="section">
+    <div class="card">
+      <div class="card-title">Validation vs Test Comparison</div>
+      <p class="text-sm text-muted mb-2">
+        The small gap between validation and test metrics (R² gap = 0.003) confirms
+        the model generalises well to unseen data with no sign of overfitting.
+      </p>
+      <div class="chart-container" style="height:300px;">
+        <canvas id="chart-metrics-comparison"></canvas>
+      </div>
+    </div>
+  </section>
+
+  <!-- Metric Explanations -->
+  <section class="section">
+    <div class="card">
+      <div class="card-title">Metrics Explained</div>
+      <div class="grid-2">
+        <div>
+          <p class="text-sm fw-bold">MAE — Mean Absolute Error</p>
+          <p class="text-sm text-muted mt-1" style="line-height:1.7;">
+            The average of absolute differences between predicted and actual revenue.
+            Interpretation: <em>"On average, the model's prediction is off by $14,127."</em>
+            MAE treats all errors equally regardless of size.
+          </p>
+        </div>
+        <div>
+          <p class="text-sm fw-bold">RMSE — Root Mean Squared Error</p>
+          <p class="text-sm text-muted mt-1" style="line-height:1.7;">
+            The square root of the average squared error, in the same unit as revenue (USD).
+            RMSE penalises large errors more heavily than MAE.
+            Interpretation: <em>"The typical error, with larger errors weighted more."</em>
+          </p>
+        </div>
+        <div>
+          <p class="text-sm fw-bold">MSE — Mean Squared Error</p>
+          <p class="text-sm text-muted mt-1" style="line-height:1.7;">
+            The average of squared prediction errors. The unit is USD² (squared dollars),
+            which makes it hard to interpret directly. MSE is most useful as an
+            intermediate step to compute RMSE.
+          </p>
+        </div>
+        <div>
+          <p class="text-sm fw-bold">R² — Coefficient of Determination</p>
+          <p class="text-sm text-muted mt-1" style="line-height:1.7;">
+            Measures what proportion of revenue variance the model explains.
+            R² = 0.885 means the model accounts for 88.5% of revenue variation.
+            A value of 1.0 would be perfect; 0.0 means the model is no better
+            than always predicting the mean revenue.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- R² Chart -->
+  <section class="section">
+    <div class="card">
+      <div class="card-title">R² Score — What It Means</div>
+      <div class="chart-container" style="height:260px;">
+        <canvas id="chart-r2-interpretation"></canvas>
+      </div>
+      <p class="text-sm text-muted mt-2">
+        Our model achieves R² = 0.885. A score above 0.80 is generally considered
+        a strong fit for a business prediction model. The remaining ~11.5% of
+        variance represents factors not captured by the 7 input features —
+        seasonality, market conditions, and other external variables.
+      </p>
+    </div>
+  </section>
+
+  <!-- Feature Coefficients -->
+  <section class="section">
+    <div class="card">
+      <div class="card-title">Feature Coefficients (StandardScaled)</div>
+      <p class="text-sm text-muted mb-2">
+        Coefficients are on <strong>StandardScaled features</strong> — each feature was rescaled
+        to mean=0, std=1 before training. This makes coefficients directly comparable across
+        features regardless of their original units.
+        A larger absolute coefficient means greater influence on the predicted revenue.
+      </p>
+      <div class="chart-container" style="height:280px;">
+        <canvas id="chart-coefficients"></canvas>
+      </div>
+      <div class="mt-2">
+        <div class="alert alert-info text-sm">
+          <strong>Interpretation note:</strong> Coefficients reflect linear associations
+          on scaled features. They do not prove causation, and features that are correlated
+          with each other share their explained variance. Use these as directional indicators,
+          not as independent effect sizes.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Coefficient Table -->
+  <section class="section">
+    <div class="card">
+      <div class="card-title">Coefficient Details</div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Feature</th>
+              <th>Coefficient</th>
+              <th>Direction</th>
+              <th>Meaning</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>previous_revenue</td>
+              <td><strong>+41,568</strong></td>
+              <td><span class="badge badge-green">Positive</span></td>
+              <td class="text-sm">Strongest driver — past performance predicts current revenue</td>
+            </tr>
+            <tr>
+              <td>number_of_customers</td>
+              <td>+17,576</td>
+              <td><span class="badge badge-green">Positive</span></td>
+              <td class="text-sm">More customers → higher revenue</td>
+            </tr>
+            <tr>
+              <td>marketing_spend</td>
+              <td>+10,999</td>
+              <td><span class="badge badge-green">Positive</span></td>
+              <td class="text-sm">Marketing investment returns revenue</td>
+            </tr>
+            <tr>
+              <td>advertising_spend</td>
+              <td>+4,591</td>
+              <td><span class="badge badge-green">Positive</span></td>
+              <td class="text-sm">Advertising contributes positively</td>
+            </tr>
+            <tr>
+              <td>product_price</td>
+              <td>+2,149</td>
+              <td><span class="badge badge-green">Positive</span></td>
+              <td class="text-sm">Higher price contributes to revenue</td>
+            </tr>
+            <tr>
+              <td>website_traffic</td>
+              <td>+1,868</td>
+              <td><span class="badge badge-green">Positive</span></td>
+              <td class="text-sm">Traffic-to-revenue conversion signal</td>
+            </tr>
+            <tr>
+              <td>discount_percentage</td>
+              <td>-2,943</td>
+              <td><span class="badge badge-orange">Negative</span></td>
+              <td class="text-sm">Discounts reduce predicted revenue</td>
+            </tr>
+            <tr style="background:var(--surface);">
+              <td><strong>Intercept</strong></td>
+              <td><strong>165,242</strong></td>
+              <td>—</td>
+              <td class="text-sm">Baseline revenue when all scaled features = 0</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="footer">
+  Business Data Analysis and Revenue Prediction Platform &mdash;
+  IBM SkillsBuild University Education &times; Hacktiv8 Capstone Project
+</footer>
+
+<script src="js/main.js"></script>
+<script src="js/api.js"></script>
+<script src="js/model.js"></script>
+</body>
+</html>

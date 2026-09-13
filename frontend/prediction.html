@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Revenue Prediction — Revenue Prediction Platform</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.2/dist/chart.umd.min.js"></script>
+</head>
+<body>
+
+<!-- ── Navigation ───────────────────────────────────────────── -->
+<nav class="nav">
+  <div class="nav-inner">
+    <span class="nav-brand">Revenue Prediction Platform</span>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="dashboard.html">Data Analysis</a></li>
+      <li><a href="model.html">Model Performance</a></li>
+      <li><a href="prediction.html" class="active">Prediction</a></li>
+    </ul>
+  </div>
+</nav>
+
+<!-- ── Main Content ─────────────────────────────────────────── -->
+<main class="page-wrapper">
+
+  <div class="page-header">
+    <h1>Revenue Prediction</h1>
+    <p>Enter business data below to generate a revenue prediction using the trained Linear Regression model.</p>
+  </div>
+
+  <div class="grid-2" style="align-items:start; gap:2rem;">
+
+    <!-- Left: Input Form -->
+    <div>
+      <div class="card">
+        <div class="card-title">Business Input Data</div>
+
+        <form id="prediction-form" novalidate>
+
+          <div class="form-grid">
+
+            <!-- Marketing Spend -->
+            <div class="form-group">
+              <label class="form-label" for="marketing_spend">Marketing Spend</label>
+              <input
+                class="form-input"
+                type="number"
+                id="marketing_spend"
+                name="marketing_spend"
+                placeholder="e.g. 10000"
+                min="0"
+                step="0.01"
+              />
+              <span class="form-hint">USD — must be &ge; 0</span>
+              <span class="form-error" id="err-marketing_spend">Must be a non-negative number.</span>
+            </div>
+
+            <!-- Advertising Spend -->
+            <div class="form-group">
+              <label class="form-label" for="advertising_spend">Advertising Spend</label>
+              <input
+                class="form-input"
+                type="number"
+                id="advertising_spend"
+                name="advertising_spend"
+                placeholder="e.g. 5000"
+                min="0"
+                step="0.01"
+              />
+              <span class="form-hint">USD — must be &ge; 0</span>
+              <span class="form-error" id="err-advertising_spend">Must be a non-negative number.</span>
+            </div>
+
+            <!-- Website Traffic -->
+            <div class="form-group">
+              <label class="form-label" for="website_traffic">Website Traffic</label>
+              <input
+                class="form-input"
+                type="number"
+                id="website_traffic"
+                name="website_traffic"
+                placeholder="e.g. 50000"
+                min="0"
+                step="1"
+              />
+              <span class="form-hint">Monthly visitors — must be &ge; 0</span>
+              <span class="form-error" id="err-website_traffic">Must be a non-negative number.</span>
+            </div>
+
+            <!-- Number of Customers -->
+            <div class="form-group">
+              <label class="form-label" for="number_of_customers">Number of Customers</label>
+              <input
+                class="form-input"
+                type="number"
+                id="number_of_customers"
+                name="number_of_customers"
+                placeholder="e.g. 1200"
+                min="0"
+                step="1"
+              />
+              <span class="form-hint">Count for the period — must be &ge; 0</span>
+              <span class="form-error" id="err-number_of_customers">Must be a non-negative number.</span>
+            </div>
+
+            <!-- Product Price -->
+            <div class="form-group">
+              <label class="form-label" for="product_price">Product Price</label>
+              <input
+                class="form-input"
+                type="number"
+                id="product_price"
+                name="product_price"
+                placeholder="e.g. 50"
+                min="0.01"
+                step="0.01"
+              />
+              <span class="form-hint">USD — must be &gt; 0</span>
+              <span class="form-error" id="err-product_price">Must be greater than 0.</span>
+            </div>
+
+            <!-- Discount Percentage -->
+            <div class="form-group">
+              <label class="form-label" for="discount_percentage">Discount Percentage</label>
+              <input
+                class="form-input"
+                type="number"
+                id="discount_percentage"
+                name="discount_percentage"
+                placeholder="e.g. 10"
+                min="0"
+                max="100"
+                step="0.1"
+              />
+              <span class="form-hint">0 to 100 %</span>
+              <span class="form-error" id="err-discount_percentage">Must be between 0 and 100.</span>
+            </div>
+
+            <!-- Previous Revenue -->
+            <div class="form-group" style="grid-column: 1 / -1;">
+              <label class="form-label" for="previous_revenue">Previous Revenue</label>
+              <input
+                class="form-input"
+                type="number"
+                id="previous_revenue"
+                name="previous_revenue"
+                placeholder="e.g. 100000"
+                min="0"
+                step="0.01"
+              />
+              <span class="form-hint">USD — revenue from the previous period. Must be &ge; 0.</span>
+              <span class="form-error" id="err-previous_revenue">Must be a non-negative number.</span>
+            </div>
+
+          </div><!-- end form-grid -->
+
+          <!-- Form Actions -->
+          <div style="margin-top:1.5rem; display:flex; gap:0.75rem; align-items:center; flex-wrap:wrap;">
+            <button type="submit" class="btn btn-primary btn-lg" id="btn-predict">
+              Predict Revenue
+            </button>
+            <button type="button" class="btn btn-secondary" id="btn-reset">
+              Reset
+            </button>
+            <div class="loading-state" id="loading-state">
+              <div class="spinner"></div>
+              <span class="text-sm text-muted">Getting prediction...</span>
+            </div>
+          </div>
+
+          <!-- API connection status -->
+          <div id="api-status" class="alert mt-2 hidden"></div>
+
+        </form>
+      </div>
+
+      <!-- Sample Input Helper -->
+      <div class="card mt-2">
+        <div class="card-title">Sample Inputs</div>
+        <p class="text-sm text-muted mb-2">Click a sample to populate the form.</p>
+        <div class="flex-gap">
+          <button class="btn btn-secondary" onclick="loadSample('small')">Small Business</button>
+          <button class="btn btn-secondary" onclick="loadSample('medium')">Medium Business</button>
+          <button class="btn btn-secondary" onclick="loadSample('large')">Large Business</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right: Results Panel -->
+    <div>
+
+      <!-- Placeholder (shown before any prediction) -->
+      <div id="result-placeholder" class="card" style="text-align:center; padding:3rem 2rem;">
+        <p style="font-size:2rem; margin-bottom:0.75rem;">&#128200;</p>
+        <p class="text-muted" style="font-size:0.925rem;">
+          Fill in the business data on the left and click
+          <strong>Predict Revenue</strong> to generate a result.
+        </p>
+      </div>
+
+      <!-- Result Panel (shown after prediction) -->
+      <div id="result-panel" class="hidden">
+
+        <!-- Predicted Revenue -->
+        <div class="result-panel mb-2">
+          <div class="result-label">Predicted Revenue</div>
+          <div class="result-value" id="result-value">$0</div>
+          <div class="result-sub" id="result-model-info">Linear Regression &mdash; USD</div>
+        </div>
+
+        <!-- Revenue Comparison Chart -->
+        <div class="card mb-2">
+          <div class="card-title">Previous vs Predicted Revenue</div>
+          <div class="chart-container" style="height:220px;">
+            <canvas id="chart-revenue-comparison"></canvas>
+          </div>
+        </div>
+
+        <!-- Input Summary -->
+        <div class="card mb-2">
+          <div class="card-title">Input Summary</div>
+          <div class="table-wrap">
+            <table id="input-summary-table">
+              <thead>
+                <tr><th>Feature</th><th>Value</th></tr>
+              </thead>
+              <tbody id="input-summary-body">
+                <!-- Populated by prediction.js -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Download Button -->
+        <div style="display:flex; gap:0.75rem; flex-wrap:wrap;">
+          <button class="btn btn-primary" id="btn-download-csv">
+            Download Result (CSV)
+          </button>
+          <button class="btn btn-secondary" id="btn-download-json">
+            Download Result (JSON)
+          </button>
+        </div>
+
+      </div><!-- end result-panel -->
+
+    </div><!-- end right column -->
+  </div><!-- end grid-2 -->
+
+  <!-- How it works -->
+  <section class="section mt-3">
+    <div class="card">
+      <div class="card-title">How the Prediction Works</div>
+      <div class="workflow">
+        <span class="workflow-step">Your Input</span>
+        <span class="workflow-arrow">&#8594;</span>
+        <span class="workflow-step">Frontend Validation</span>
+        <span class="workflow-arrow">&#8594;</span>
+        <span class="workflow-step">POST /predict</span>
+        <span class="workflow-arrow">&#8594;</span>
+        <span class="workflow-step">Pydantic Validation</span>
+        <span class="workflow-arrow">&#8594;</span>
+        <span class="workflow-step">StandardScaler</span>
+        <span class="workflow-arrow">&#8594;</span>
+        <span class="workflow-step">Linear Regression</span>
+        <span class="workflow-arrow">&#8594;</span>
+        <span class="workflow-step">Predicted Revenue</span>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="footer">
+  Business Data Analysis and Revenue Prediction Platform &mdash;
+  IBM SkillsBuild University Education &times; Hacktiv8 Capstone Project
+</footer>
+
+<script src="js/main.js"></script>
+<script src="js/api.js"></script>
+<script src="js/prediction.js"></script>
+</body>
+</html>

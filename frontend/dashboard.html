@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Data Analysis Dashboard — Revenue Prediction Platform</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <!-- Chart.js from CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.2/dist/chart.umd.min.js"></script>
+</head>
+<body>
+
+<!-- ── Navigation ───────────────────────────────────────────── -->
+<nav class="nav">
+  <div class="nav-inner">
+    <span class="nav-brand">Revenue Prediction Platform</span>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="dashboard.html" class="active">Data Analysis</a></li>
+      <li><a href="model.html">Model Performance</a></li>
+      <li><a href="prediction.html">Prediction</a></li>
+    </ul>
+  </div>
+</nav>
+
+<!-- ── Main Content ─────────────────────────────────────────── -->
+<main class="page-wrapper">
+
+  <div class="page-header">
+    <h1>Data Analysis Dashboard</h1>
+    <p>Exploratory data analysis of the synthetic business revenue dataset — 5,000 samples, 7 input features.</p>
+  </div>
+
+  <!-- Dataset Overview Stats -->
+  <section class="section">
+    <div class="section-title">Dataset Overview</div>
+    <div class="grid-4">
+      <div class="stat-card">
+        <div class="stat-label">Total Samples</div>
+        <div class="stat-value">5,000</div>
+        <div class="stat-sub">Synthetic business records</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Input Features</div>
+        <div class="stat-value">7</div>
+        <div class="stat-sub">Marketing, traffic, pricing...</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Target Variable</div>
+        <div class="stat-value">Revenue</div>
+        <div class="stat-sub">USD — what we predict</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Missing Values</div>
+        <div class="stat-value">0</div>
+        <div class="stat-sub">Clean dataset, no imputation needed</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Revenue Summary -->
+  <section class="section">
+    <div class="section-title">Revenue Summary (Target Variable)</div>
+    <div class="grid-4">
+      <div class="stat-card">
+        <div class="stat-label">Minimum</div>
+        <div class="stat-value">$36K</div>
+        <div class="stat-sub">$36,069</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Mean</div>
+        <div class="stat-value">$166K</div>
+        <div class="stat-sub">$165,609 average revenue</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Median</div>
+        <div class="stat-value">$164K</div>
+        <div class="stat-sub">$163,692 — near symmetric distribution</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Maximum</div>
+        <div class="stat-value">$347K</div>
+        <div class="stat-sub">$346,836</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Descriptive Statistics Table -->
+  <section class="section">
+    <div class="card">
+      <div class="card-title">Descriptive Statistics</div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Feature</th>
+              <th>Min</th>
+              <th>Mean</th>
+              <th>Median</th>
+              <th>Max</th>
+              <th>Std Dev</th>
+            </tr>
+          </thead>
+          <tbody id="stats-table-body">
+            <tr><td>marketing_spend</td><td>$1,000</td><td>$25,527</td><td>$25,518</td><td>$50,000</td><td>$14,142</td></tr>
+            <tr><td>advertising_spend</td><td>$500</td><td>$15,354</td><td>$15,264</td><td>$30,000</td><td>$6,386</td></tr>
+            <tr><td>website_traffic</td><td>5,000</td><td>89,768</td><td>89,267</td><td>200,000</td><td>41,863</td></tr>
+            <tr><td>number_of_customers</td><td>100</td><td>2,000</td><td>1,999</td><td>5,000</td><td>869</td></tr>
+            <tr><td>product_price</td><td>$10</td><td>$256</td><td>$256</td><td>$500</td><td>$141</td></tr>
+            <tr><td>discount_percentage</td><td>0%</td><td>25.2%</td><td>25.2%</td><td>50%</td><td>14.3%</td></tr>
+            <tr><td>previous_revenue</td><td>$20,000</td><td>$256,889</td><td>$256,562</td><td>$500,000</td><td>$138,396</td></tr>
+            <tr style="background:var(--surface);font-weight:600;"><td>revenue (target)</td><td>$36,069</td><td>$165,609</td><td>$163,692</td><td>$346,836</td><td>$51,202</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="text-sm text-muted mt-2">
+        All features are continuous numeric values. The mean and median are close for all features,
+        indicating roughly symmetric distributions without extreme skew.
+      </p>
+    </div>
+  </section>
+
+  <!-- Feature Distribution Chart -->
+  <section class="section">
+    <div class="card">
+      <div class="card-title">Feature Distribution — Average Values</div>
+      <p class="text-sm text-muted mb-2">
+        Average value of each input feature across 5,000 business records.
+        Each feature operates on a different scale (USD, count, percentage).
+      </p>
+      <div class="chart-container" style="height:320px;">
+        <canvas id="chart-feature-means"></canvas>
+      </div>
+    </div>
+  </section>
+
+  <!-- Revenue Distribution Chart -->
+  <section class="section">
+    <div class="card">
+      <div class="card-title">Revenue Distribution</div>
+      <p class="text-sm text-muted mb-2">
+        Revenue distribution across 5,000 samples shown as a histogram (frequency per bin).
+        The distribution is roughly symmetric around the mean of $165,609.
+      </p>
+      <div class="chart-container" style="height:300px;">
+        <canvas id="chart-revenue-dist"></canvas>
+      </div>
+    </div>
+  </section>
+
+  <!-- Correlation Analysis -->
+  <section class="section">
+    <div class="card">
+      <div class="card-title">Feature Correlations with Revenue</div>
+      <p class="text-sm text-muted mb-2">
+        Pearson correlation coefficient between each input feature and Revenue.
+        Values range from -1 (strong negative) to +1 (strong positive).
+        A value near 0 indicates a weak linear relationship.
+      </p>
+      <div class="chart-container" style="height:300px;">
+        <canvas id="chart-correlations"></canvas>
+      </div>
+      <div class="mt-2">
+        <p class="text-sm text-muted">
+          <strong>previous_revenue</strong> has the strongest correlation (+0.824), meaning past
+          performance is the best predictor of current revenue.
+          <strong>discount_percentage</strong> has a weak negative correlation (-0.049) — discounts
+          slightly reduce revenue as expected. <strong>product_price</strong> has near-zero
+          correlation (+0.038) because its revenue effect is diluted by varying customer counts.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Correlation Bars -->
+  <section class="section">
+    <div class="card">
+      <div class="card-title">Correlation Summary</div>
+      <div class="corr-bar-wrap" id="corr-bars">
+        <!-- Populated by dashboard.js -->
+      </div>
+    </div>
+  </section>
+
+  <!-- Scatter Plot placeholder -->
+  <section class="section">
+    <div class="card">
+      <div class="card-title">Feature vs Revenue Relationships</div>
+      <p class="text-sm text-muted mb-2">
+        Each chart below shows how a single feature relates to revenue across the dataset.
+        The trend line shows the best-fit linear relationship.
+        Wider scatter indicates more noise (weaker linear signal).
+      </p>
+      <div class="grid-2" style="gap:1.5rem;">
+        <div>
+          <p class="text-sm fw-bold mb-1">Previous Revenue vs Revenue (r = +0.824)</p>
+          <div class="chart-container" style="height:220px;">
+            <canvas id="chart-scatter-prev"></canvas>
+          </div>
+        </div>
+        <div>
+          <p class="text-sm fw-bold mb-1">Number of Customers vs Revenue (r = +0.373)</p>
+          <div class="chart-container" style="height:220px;">
+            <canvas id="chart-scatter-customers"></canvas>
+          </div>
+        </div>
+        <div>
+          <p class="text-sm fw-bold mb-1">Marketing Spend vs Revenue (r = +0.291)</p>
+          <div class="chart-container" style="height:220px;">
+            <canvas id="chart-scatter-marketing"></canvas>
+          </div>
+        </div>
+        <div>
+          <p class="text-sm fw-bold mb-1">Discount Percentage vs Revenue (r = -0.049)</p>
+          <div class="chart-container" style="height:220px;">
+            <canvas id="chart-scatter-discount"></canvas>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="footer">
+  Business Data Analysis and Revenue Prediction Platform &mdash;
+  IBM SkillsBuild University Education &times; Hacktiv8 Capstone Project
+</footer>
+
+<script src="js/main.js"></script>
+<script src="js/dashboard.js"></script>
+</body>
+</html>

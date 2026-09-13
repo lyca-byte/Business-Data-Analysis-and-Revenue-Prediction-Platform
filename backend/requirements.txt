@@ -1,0 +1,19 @@
+# ============================================================
+# Backend requirements
+# Used by: FastAPI backend (backend/)
+# ============================================================
+
+# Web framework
+fastapi==0.111.0
+uvicorn[standard]==0.30.1
+
+# Data validation
+pydantic==2.7.1
+
+# Machine Learning (model loading and prediction)
+scikit-learn==1.5.0
+numpy==1.26.4
+pandas==2.2.2
+
+# Model serialization
+joblib==1.4.2
