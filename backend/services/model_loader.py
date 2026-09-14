@@ -20,6 +20,14 @@ Usage:
 """
 
 import json
+import os
+
+# Vercel/AWS Lambda-style serverless filesystems are read-only except /tmp.
+# huggingface_hub must be told to cache there BEFORE it is imported, since
+# its cache directory is resolved once at import time.
+os.environ.setdefault("HF_HOME", "/tmp/huggingface")
+os.environ.setdefault("HF_HUB_CACHE", "/tmp/huggingface/hub")
+
 import joblib
 
 from huggingface_hub import hf_hub_download
