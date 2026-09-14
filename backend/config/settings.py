@@ -10,6 +10,16 @@ this file needs to change.
 
 import os
 
+# Config for Hugging Face
+HF_REPO_ID = os.getenv(
+    "HF_REPO_ID",
+    "lyca-byte/business-revenue-prediction-model"
+)
+
+HF_TOKEN = os.getenv(
+    "HF_TOKEN"
+)
+
 # ── Base directory ────────────────────────────────────────────────────────────
 # __file__ is backend/config/settings.py
 # We go up two levels to reach the project root.

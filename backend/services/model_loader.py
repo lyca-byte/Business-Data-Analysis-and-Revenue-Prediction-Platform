@@ -22,63 +22,75 @@ Usage:
 import json
 import joblib
 
-from backend.config.settings import MODEL_PATH, SCALER_PATH, METADATA_PATH
+from huggingface_hub import hf_hub_download
 
+from backend.config.settings import (
+    HF_REPO_ID,
+    HF_TOKEN,
+)
 
 class ModelLoader:
-    """
-    Singleton-style container for the trained model artifacts.
-
-    Attributes:
-        model    -- fitted sklearn LinearRegression instance
-        scaler   -- fitted sklearn StandardScaler instance
-        metadata -- dict loaded from model_metadata.json
-        is_loaded -- bool, True after load() succeeds
-    """
-
     def __init__(self):
-        self.model     = None
-        self.scaler    = None
-        self.metadata  = None
+        self.model = None
+        self.scaler = None
+        self.metadata = None
         self.is_loaded = False
 
-    def load(self) -> None:
-        """
-        Load all three model artifacts from disk.
-        Raises FileNotFoundError if any artifact is missing.
-        Call this once at application startup via FastAPI lifespan.
-        """
-        # Load the trained LinearRegression model
-        self.model = joblib.load(MODEL_PATH)
+    def load(self):
+        print("Downloading model from Hugging Face...")
+        model_path = hf_hub_download(
+            repo_id=HF_REPO_ID,
+            filename="revenue_prediction_model.pkl",
+            token=HF_TOKEN,
+        )
 
-        # Load the fitted StandardScaler
-        self.scaler = joblib.load(SCALER_PATH)
+        scaler_path = hf_hub_download(
+            repo_id=HF_REPO_ID,
+            filename="preprocessing.pkl",
+            token=HF_TOKEN,
+        )
 
-        # Load the metadata JSON
-        with open(METADATA_PATH, "r") as f:
-            self.metadata = json.load(f)
+        metadata_path = hf_hub_download(
+            repo_id=HF_REPO_ID,
+            filename="model_metadata.json",
+            token=HF_TOKEN,
+        )
+
+        print("Loading model artifacts...")
+
+        self.model = joblib.load(model_path)
+        self.scaler = joblib.load(scaler_path)
+
+        with open(metadata_path, "r") as file:
+            self.metadata = json.load(file)
 
         self.is_loaded = True
 
+
     @property
-    def feature_columns(self) -> list[str]:
-        """Return the ordered list of feature names from metadata."""
+    def feature_columns(self):
         if not self.is_loaded:
-            raise RuntimeError("ModelLoader has not been loaded yet.")
+            raise RuntimeError(
+                "ModelLoader has not been loaded."
+            )
         return self.metadata["features"]
 
+
     @property
-    def model_name(self) -> str:
+    def model_name(self):
         if not self.is_loaded:
-            raise RuntimeError("ModelLoader has not been loaded yet.")
+            raise RuntimeError(
+                "ModelLoader has not been loaded."
+            )
         return self.metadata["model_name"]
 
+
     @property
-    def model_type(self) -> str:
+    def model_type(self):
         if not self.is_loaded:
-            raise RuntimeError("ModelLoader has not been loaded yet.")
+            raise RuntimeError(
+                "ModelLoader has not been loaded."
+            )
         return self.metadata["model_type"]
 
-
-# Single shared instance — imported by predictor.py and main.py
 model_loader = ModelLoader()

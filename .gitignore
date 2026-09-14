@@ -57,3 +57,13 @@ htmlcov/
 
 # -- Node (not used here, but safe to include) ----------------
 node_modules/
+
+# Model
+models/business-revenue-prediction-models
+models/*.pkl
+models/*.joblib
+
+# Hugging Face cache
+.huggingface/
+
+.
