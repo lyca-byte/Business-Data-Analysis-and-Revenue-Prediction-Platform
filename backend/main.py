@@ -89,7 +89,7 @@ app.add_middleware(
 
 # ── Endpoint 1: Health Check ──────────────────────────────────────────────────
 @app.get(
-    "/health",
+    "/api/health",
     response_model=HealthResponse,
     summary="Health check",
     tags=["System"],
@@ -109,7 +109,7 @@ async def health_check():
 
 # ── Endpoint 2: Model Information ─────────────────────────────────────────────
 @app.get(
-    "/model-info",
+    "/api/model-info",
     summary="Model information and performance metrics",
     tags=["Model"],
 )
@@ -147,7 +147,7 @@ async def model_info():
 
 # ── Endpoint 3: Revenue Prediction ────────────────────────────────────────────
 @app.post(
-    "/predict",
+    "api/predict",
     response_model=PredictionResponse,
     summary="Predict revenue from business inputs",
     tags=["Prediction"],

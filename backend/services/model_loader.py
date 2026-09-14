@@ -37,18 +37,27 @@ class ModelLoader:
         self.is_loaded = False
 
     def load(self):
-        print("Downloading model from Hugging Face...")
+
+        print("Starting model loading process...")
+        print(f"Hugging Face Repository: {HF_REPO_ID}")
+
+        print("Downloading revenue prediction model...")
+
         model_path = hf_hub_download(
             repo_id=HF_REPO_ID,
             filename="revenue_prediction_model.pkl",
             token=HF_TOKEN,
         )
 
+        print("Downloading preprocessing artifact...")
+
         scaler_path = hf_hub_download(
             repo_id=HF_REPO_ID,
             filename="preprocessing.pkl",
             token=HF_TOKEN,
         )
+
+        print("Downloading metadata...")
 
         metadata_path = hf_hub_download(
             repo_id=HF_REPO_ID,
@@ -59,12 +68,15 @@ class ModelLoader:
         print("Loading model artifacts...")
 
         self.model = joblib.load(model_path)
+
         self.scaler = joblib.load(scaler_path)
 
         with open(metadata_path, "r") as file:
             self.metadata = json.load(file)
 
         self.is_loaded = True
+
+        print("Model loaded successfully.")
 
 
     @property
