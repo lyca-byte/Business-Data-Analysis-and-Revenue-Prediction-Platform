@@ -1,0 +1,17 @@
+venv/
+.venv/
+
+notebooks/
+data/
+data_generation/
+results/
+
+*.ipynb
+
+__pycache__/
+*.pyc
+
+Business Data Analysis and Revenue Prediction Platform.zip
+
+.env
+.env.*

@@ -147,7 +147,7 @@ async def model_info():
 
 # ── Endpoint 3: Revenue Prediction ────────────────────────────────────────────
 @app.post(
-    "api/predict",
+    "/api/predict",
     response_model=PredictionResponse,
     summary="Predict revenue from business inputs",
     tags=["Prediction"],
