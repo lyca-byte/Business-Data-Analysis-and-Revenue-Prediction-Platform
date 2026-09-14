@@ -41,18 +41,41 @@ from backend.services.predictor import predict_revenue
 # Loading the model here means it is ready before the first request arrives.
 
 @asynccontextmanager
+# async def lifespan(app: FastAPI):
+#     # Startup
+#     try:
+#         model_loader.load()
+#         print(f"[startup] Model loaded: {model_loader.model_name}")
+#         print(f"[startup] Features    : {model_loader.feature_columns}")
+#     except FileNotFoundError as e:
+#         print(f"[startup] ERROR: Model artifact not found — {e}")
+#         print("[startup] Run the training notebook first to generate model files.")
+#         raise
+#     yield
+#     # Shutdown (nothing to clean up for this project)
+#     print("[shutdown] Application stopping.")
+
+@asynccontextmanager
 async def lifespan(app: FastAPI):
-    # Startup
+
     try:
+        print("[startup] Starting application...")
+        
         model_loader.load()
+
         print(f"[startup] Model loaded: {model_loader.model_name}")
-        print(f"[startup] Features    : {model_loader.feature_columns}")
-    except FileNotFoundError as e:
-        print(f"[startup] ERROR: Model artifact not found — {e}")
-        print("[startup] Run the training notebook first to generate model files.")
+        print(f"[startup] Features: {model_loader.feature_columns}")
+
+    except Exception as e:
+
+        print("[startup] ERROR: Failed to load model.")
+        print(f"[startup] Error type: {type(e).__name__}")
+        print(f"[startup] Error message: {str(e)}")
+
         raise
+
     yield
-    # Shutdown (nothing to clean up for this project)
+
     print("[shutdown] Application stopping.")
 
 
