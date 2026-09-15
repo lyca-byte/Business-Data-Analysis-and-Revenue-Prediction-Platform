@@ -24,11 +24,10 @@ import os
 import traceback
 
 import joblib
+from huggingface_hub import hf_hub_download
 
+from backend.config.settings import HF_REPO_ID, HF_TOKEN
 
-# ---------------------------------------------------------
-# Serverless Hugging Face Cache Configuration
-# ---------------------------------------------------------
 
 CACHE_DIR = "/tmp/huggingface"
 
@@ -38,18 +37,9 @@ os.environ["HF_HUB_CACHE"] = os.path.join(CACHE_DIR, "hub")
 os.makedirs(CACHE_DIR, exist_ok=True)
 
 
-from huggingface_hub import hf_hub_download
-
-from backend.config.settings import (
-    HF_REPO_ID,
-    HF_TOKEN,
-)
-
-
 class ModelLoader:
 
     def __init__(self):
-
         self.model = None
         self.scaler = None
         self.metadata = None
@@ -57,264 +47,143 @@ class ModelLoader:
         self.is_loaded = False
         self.load_error = None
 
-
-    # -----------------------------------------------------
-    # Load Model
-    # -----------------------------------------------------
-
     def load(self):
 
-        # Prevent repeated loading
         if self.is_loaded:
-
-            print("[model] Model already loaded.")
-
-            return
-
+            return True
 
         try:
-
             print("=" * 60)
-            print("[model] Starting model loading process")
-
-            print(
-                f"[model] HF_REPO_ID: {HF_REPO_ID}"
-            )
-
-            print(
-                f"[model] HF_TOKEN available: "
-                f"{bool(HF_TOKEN)}"
-            )
-
-            print(
-                f"[model] Cache directory: "
-                f"{CACHE_DIR}"
-            )
-
+            print("[MODEL] Starting model loading")
+            print(f"[MODEL] HF_REPO_ID = {HF_REPO_ID}")
+            print(f"[MODEL] HF_TOKEN configured = {bool(HF_TOKEN)}")
+            print(f"[MODEL] Cache = {CACHE_DIR}")
             print("=" * 60)
 
+            if not HF_REPO_ID:
+                raise RuntimeError(
+                    "HF_REPO_ID environment variable is empty."
+                )
 
             # -------------------------------------------------
-            # Download Model
+            # Model
             # -------------------------------------------------
 
             print(
-                "[model] Downloading "
-                "revenue_prediction_model.pkl"
+                "[MODEL] Downloading revenue_prediction_model.pkl"
             )
 
             model_path = hf_hub_download(
-
                 repo_id=HF_REPO_ID,
-
                 filename="revenue_prediction_model.pkl",
-
-                token=HF_TOKEN if HF_TOKEN else None,
-
+                token=HF_TOKEN or None,
                 cache_dir=CACHE_DIR,
-
-                force_download=False,
-
             )
 
+            print(f"[MODEL] Model path: {model_path}")
 
             # -------------------------------------------------
-            # Download Preprocessing
+            # Preprocessing
             # -------------------------------------------------
 
             print(
-                "[model] Downloading preprocessing.pkl"
+                "[MODEL] Downloading preprocessing.pkl"
             )
 
-            scaler_path = hf_hub_download(
-
+            preprocessing_path = hf_hub_download(
                 repo_id=HF_REPO_ID,
-
                 filename="preprocessing.pkl",
-
-                token=HF_TOKEN if HF_TOKEN else None,
-
+                token=HF_TOKEN or None,
                 cache_dir=CACHE_DIR,
-
-                force_download=False,
-
             )
 
+            print(
+                f"[MODEL] Preprocessing path: "
+                f"{preprocessing_path}"
+            )
 
             # -------------------------------------------------
-            # Download Metadata
+            # Metadata
             # -------------------------------------------------
 
             print(
-                "[model] Downloading model_metadata.json"
+                "[MODEL] Downloading model_metadata.json"
             )
 
             metadata_path = hf_hub_download(
-
                 repo_id=HF_REPO_ID,
-
                 filename="model_metadata.json",
-
-                token=HF_TOKEN if HF_TOKEN else None,
-
+                token=HF_TOKEN or None,
                 cache_dir=CACHE_DIR,
-
-                force_download=False,
-
             )
-
-
-            # -------------------------------------------------
-            # Load Joblib Artifacts
-            # -------------------------------------------------
 
             print(
-                "[model] Loading joblib artifacts"
+                f"[MODEL] Metadata path: "
+                f"{metadata_path}"
             )
-
-
-            self.model = joblib.load(
-
-                model_path
-
-            )
-
-
-            self.scaler = joblib.load(
-
-                scaler_path
-
-            )
-
 
             # -------------------------------------------------
-            # Load Metadata
+            # Load files
             # -------------------------------------------------
 
-            print(
-                "[model] Loading metadata"
-            )
+            print("[MODEL] Loading model")
 
+            self.model = joblib.load(model_path)
+
+            print("[MODEL] Loading preprocessing")
+
+            self.scaler = joblib.load(preprocessing_path)
+
+            print("[MODEL] Loading metadata")
 
             with open(
-
                 metadata_path,
-
                 "r",
-
-                encoding="utf-8"
-
-            ) as file:
-
-                self.metadata = json.load(
-
-                    file
-
-                )
-
+                encoding="utf-8",
+            ) as f:
+                self.metadata = json.load(f)
 
             self.is_loaded = True
-
             self.load_error = None
 
-
+            print("=" * 60)
+            print("[MODEL] MODEL LOADED SUCCESSFULLY")
             print("=" * 60)
 
-            print(
-                "[model] Model loaded successfully"
-            )
-
-            print(
-                f"[model] Model name: "
-                f"{self.metadata.get('model_name')}"
-            )
-
-            print(
-                f"[model] Features: "
-                f"{self.metadata.get('features')}"
-            )
-
-            print("=" * 60)
-
+            return True
 
         except Exception as e:
 
             self.is_loaded = False
-
-            self.load_error = str(e)
-
+            self.load_error = (
+                f"{type(e).__name__}: {str(e)}"
+            )
 
             print("=" * 60)
-
+            print("[MODEL] MODEL LOADING FAILED")
             print(
-                "[model] MODEL LOADING FAILED"
+                f"[MODEL] {self.load_error}"
             )
-
-            print(
-                f"[model] Error type: "
-                f"{type(e).__name__}"
-            )
-
-            print(
-                f"[model] Error message: "
-                f"{str(e)}"
-            )
-
-            print(
-                "[model] Full traceback:"
-            )
+            print("=" * 60)
 
             traceback.print_exc()
 
-            print("=" * 60)
-
-
-            # IMPORTANT:
-            # Do not crash the entire Vercel function.
             return False
 
-
-        return True
-
-
-    # -----------------------------------------------------
-    # Ensure Model Loaded
-    # -----------------------------------------------------
-
     def ensure_loaded(self):
-
         if self.is_loaded:
-
             return True
-
-
-        print(
-            "[model] Model not loaded."
-        )
-
-        print(
-            "[model] Attempting to load model..."
-        )
-
 
         return self.load()
 
-
-    # -----------------------------------------------------
-    # Properties
-    # -----------------------------------------------------
 
     @property
     def feature_columns(self):
 
         if not self.is_loaded:
-
             raise RuntimeError(
-
                 "Model is not loaded."
-
             )
-
 
         return self.metadata["features"]
 
@@ -323,13 +192,9 @@ class ModelLoader:
     def model_name(self):
 
         if not self.is_loaded:
-
             raise RuntimeError(
-
                 "Model is not loaded."
-
             )
-
 
         return self.metadata["model_name"]
 
@@ -338,19 +203,11 @@ class ModelLoader:
     def model_type(self):
 
         if not self.is_loaded:
-
             raise RuntimeError(
-
                 "Model is not loaded."
-
             )
-
 
         return self.metadata["model_type"]
 
-
-# ---------------------------------------------------------
-# Global Model Loader
-# ---------------------------------------------------------
 
 model_loader = ModelLoader()
