@@ -346,9 +346,9 @@ form.addEventListener('submit', async (event) => {
     displayResult(result, inputData);
   } catch (error) {
     showApiStatus(
-      `Unable to get prediction: ${error.message}. ` +
-      'Make sure the backend is running at http://127.0.0.1:8000',
-      'error'
+    `Unable to get prediction: ${error.message}. ` +
+    'Please check the deployed backend API and try again.',
+    'error'
     );
   } finally {
     hideLoading();
