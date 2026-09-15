@@ -151,7 +151,7 @@ async def javascript_file(filename: str):
 # =========================================================
 
 @app.get(
-    "/health",
+    "api/health",
     response_model=HealthResponse,
     summary="Health check",
     tags=["System"],
@@ -170,7 +170,7 @@ async def health_check():
 # =========================================================
 
 @app.get(
-    "/debug-config",
+    "api/debug-config",
     include_in_schema=False,
 )
 async def debug_config():
@@ -192,7 +192,7 @@ async def debug_config():
 # =========================================================
 
 @app.get(
-    "/model-info",
+    "api/model-info",
     summary="Model information",
     tags=["Model"],
 )
@@ -252,7 +252,7 @@ async def model_info():
 # =========================================================
 
 @app.post(
-    "/predict",
+    "api/predict",
     response_model=PredictionResponse,
     summary="Predict revenue",
     tags=["Prediction"],
