@@ -14,18 +14,6 @@ Run with:
 Or from inside the backend/ directory:
     uvicorn main:app --reload --host 127.0.0.1 --port 8000
 """
-"""
-main.py
--------
-FastAPI application entry point.
-"""
-
-"""
-main.py
--------
-FastAPI application for the Business Data Analysis
-and Revenue Prediction Platform.
-"""
 
 import os
 from pathlib import Path
@@ -163,7 +151,7 @@ async def javascript_file(filename: str):
 # =========================================================
 
 @app.get(
-    "/api/health",
+    "/health",
     response_model=HealthResponse,
     summary="Health check",
     tags=["System"],
@@ -182,7 +170,7 @@ async def health_check():
 # =========================================================
 
 @app.get(
-    "/api/debug-config",
+    "/debug-config",
     include_in_schema=False,
 )
 async def debug_config():
@@ -204,7 +192,7 @@ async def debug_config():
 # =========================================================
 
 @app.get(
-    "/api/model-info",
+    "/model-info",
     summary="Model information",
     tags=["Model"],
 )
@@ -264,7 +252,7 @@ async def model_info():
 # =========================================================
 
 @app.post(
-    "/api/predict",
+    "/predict",
     response_model=PredictionResponse,
     summary="Predict revenue",
     tags=["Prediction"],
